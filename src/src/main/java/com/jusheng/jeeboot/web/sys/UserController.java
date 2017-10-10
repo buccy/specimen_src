@@ -1,15 +1,12 @@
 package com.jusheng.jeeboot.web.sys;
 
-import com.jusheng.jeeboot.dao.SysUserMapper;
 import com.jusheng.jeeboot.entity.SysMenu;
 import com.jusheng.jeeboot.entity.SysUser;
-import com.jusheng.jeeboot.service.sys.DictService;
 import com.jusheng.jeeboot.service.sys.UserService;
 import com.jusheng.jeeboot.system.RetObject;
 import com.jusheng.jeeboot.web.BaseController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

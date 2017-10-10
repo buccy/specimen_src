@@ -1,9 +1,14 @@
 package com.jusheng.jeeboot.web.biz;
 
+import com.github.pagehelper.PageInfo;
 import com.jusheng.jeeboot.entity.BizCounter;
 import com.jusheng.jeeboot.entity.SysArea;
+import com.jusheng.jeeboot.service.biz.CounterService;
 import com.jusheng.jeeboot.system.RetObject;
+import com.jusheng.jeeboot.web.BaseController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,9 +24,10 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/counter")
-public class CounterController {
+public class CounterController extends BaseController {
 
-
+    @Autowired @Lazy
+    CounterService counterService;
 
     /**
      *
@@ -55,10 +62,19 @@ public class CounterController {
      *
      */
     @RequestMapping("list")
-    @RequiresPermissions("sys:dict:edit")
+//    @RequiresPermissions("biz:list:view")
     public RetObject list(BizCounter bizCounter) {
+
+        List<BizCounter> bizCounterList = counterService.list(bizCounter);
+
         Map<String,Object> retMap=new HashMap<String, Object>();
-        return RetObject.genSuccess("成功了",retMap);
+        retMap.put("pageInfo", new PageInfo<BizCounter>(bizCounterList));
+        retMap.put("queryParam", bizCounter);
+        retMap.put("page", bizCounter.getPage());
+        retMap.put("rows", bizCounter.getRows());
+
+        List<BizCounter> list=counterService.list(bizCounter);
+        return RetObject.genSuccess("成功",retMap);
     }
 
 
@@ -126,6 +142,17 @@ public class CounterController {
         return RetObject.genSuccess("删除成功",null);
     }
 
+    /**
+     * 批量删除
+     * @param ids 格式:2,3,4
+     * @return
+     */
+    @RequestMapping(value = "deleteBatch", method = RequestMethod.POST)
+    public RetObject deleteBatch(BizCounter bizCounter) {
+        Integer count=counterService.deleteBatchByIds(bizCounter);
+        return RetObject.genSuccess(String.format("%s条记录删除成功",count),null);
+    }
+
 
     /**
      *
@@ -162,5 +189,6 @@ public class CounterController {
     public RetObject save(BizCounter bizCounter) {
         return RetObject.genSuccess("新增/更新/保存成功",null);
     }
+
 
 }
