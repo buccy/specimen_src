@@ -1,17 +1,11 @@
 package com.jusheng.jeeboot.web.sys;
 
 
-import com.github.pagehelper.PageInfo;
-import com.jusheng.jeeboot.entity.BaseEntity;
 import com.jusheng.jeeboot.entity.SysArea;
 import com.jusheng.jeeboot.entity.SysDict;
-import com.jusheng.jeeboot.service.sys.DictService;
 import com.jusheng.jeeboot.system.RetObject;
-import com.jusheng.jeeboot.system.SysCode;
-import com.jusheng.jeeboot.system.exception.BizErrorException;
 import com.jusheng.jeeboot.web.BaseController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -62,20 +55,16 @@ public class DictController extends BaseController {
     }
      *
      */
-    @Autowired
-    DictService dictService;
     @RequestMapping("list")
-//    @RequiresPermissions("sys:dict:view")
+    @RequiresPermissions("sys:dict:view")
     public RetObject list(SysDict sysDict) {
-        List<SysDict> countryList = dictService.getAll(sysDict);
+        Map<String,Object> retMap=new HashMap<String, Object>();
+//        map.put("pageInfo", new PageInfo<Country>(countryList));
+//        map.put("queryParam", country);
+//        map.put("page", country.getPage());
+//        map.put("rows", country.getRows());
 
-        Map<String,Object> map=new HashMap<String, Object>();
-        map.put("pageInfo", new PageInfo<SysDict>(countryList));
-        map.put("queryParam", sysDict);
-        map.put("page", sysDict.getPage());
-        map.put("rows", sysDict.getRows());
-
-        return RetObject.genRetObject(SysCode.RET_Succ,messageSource.getMessage("common.success",null,locale),map);
+        return RetObject.genSuccess("成功了",retMap);
     }
 
 
@@ -109,11 +98,11 @@ public class DictController extends BaseController {
      *
      */
     @RequestMapping(value = "view/{id}")
-//    @RequiresPermissions("sys:dict:view")
-    public RetObject view(@PathVariable String id) {
-        SysDict sysDict = dictService.getById(id);
-        return RetObject.genRetObject(SysCode.RET_Succ,"获取成功",sysDict);
-
+    @RequiresPermissions("sys:dict:view")
+    public RetObject view(@PathVariable Integer id) {
+        Map<String,Object> retMap=new HashMap<String, Object>();
+//        map.put("record",sysArea);
+        return RetObject.genSuccess("成功了",retMap);
     }
 
     /**
@@ -140,10 +129,10 @@ public class DictController extends BaseController {
      *
      */
     @RequestMapping(value = "delete/{id}")
-//    @RequiresPermissions("sys:dict:delete")
-    public RetObject delete(@PathVariable String id, RedirectAttributes ra) {
-        dictService.deleteById(id);
-        return RetObject.genRetObject(SysCode.RET_Succ,"删除成功",null);
+    @RequiresPermissions("sys:dict:delete")
+    public RetObject delete(@PathVariable Integer id, RedirectAttributes ra) {
+
+        return RetObject.genSuccess("删除成功",null);
     }
 
     /**
@@ -179,21 +168,10 @@ public class DictController extends BaseController {
      *
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
-//    @RequiresPermissions("sys:dict:edit")
-    public RetObject save(SysDict sysDict) throws BizErrorException {
+    @RequiresPermissions("sys:dict:edit")
+    public RetObject save(SysDict sysDict) {
 
-        String msg="";
-        if(sysDict.getOpFlag().equals(BaseEntity.OpFlag.add)) {
-            msg="新增成功";
-        }else if (sysDict.getOpFlag().equals(BaseEntity.OpFlag.update)) {
-            msg="修改成功";
-        }else{
-            msg="请传送操作标志";
-            return RetObject.genBizErr(msg,null);
-        }
-
-        this.dictService.save(sysDict);
-        return RetObject.genSuccess("成功",null);
+        return RetObject.genSuccess("新增/保存成功",null);
     }
 
 }

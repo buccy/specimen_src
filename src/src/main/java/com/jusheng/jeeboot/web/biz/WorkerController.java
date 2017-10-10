@@ -90,7 +90,7 @@ public class WorkerController {
      *
      */
     @RequestMapping(value = "view/{id}")
-    public RetObject view(@PathVariable Integer id) {
+    public RetObject view(@PathVariable String id) {
         Map<String,Object> retMap=new HashMap<String, Object>();
 
         return RetObject.genSuccess("成功了",retMap);
@@ -122,7 +122,7 @@ public class WorkerController {
      *
      */
     @RequestMapping(value = "delete/{id}")
-    public RetObject delete(@PathVariable Integer id, RedirectAttributes ra) {
+    public RetObject delete(@PathVariable String id, RedirectAttributes ra) {
 
         return RetObject.genSuccess("删除成功",null);
     }

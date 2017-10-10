@@ -17,37 +17,4 @@
     <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
   </resultMap>
 
-  <select id="findList" resultType="BizLine" >
-    select
-    a.id,
-    a.code,
-    a.name,
-    a.manager_id as "managerId",
-    a.region_id as "regionId",
-    a.back_time as "backTime",
-    a.status,
-    a.remark,
-    a.area_id as "areaId",
-    a.office_id as "officeId",
-
-    b.id as "worker.id",
-    b.name as "worker.name",
-
-    c.id as "area.id",
-    c.name as "area.name"
-
-    from biz_line a
-    inner JOIN biz_worker b on a.manager_id = b.id
-    inner JOIN sys_area c on a.region_id = c.id
-    <where>
-      <!--当前的用户只能看到本机构所属下的所有数据-->
-      <if test="managerId !=null and managerId !=''">
-        and a.manager_id=#{managerId}
-      </if>
-      <if test="name != null and name != ''">
-        AND a.name like CONCAT('%',#{name},'%')
-      </if>
-    </where>
-  </select>
-
 </mapper>

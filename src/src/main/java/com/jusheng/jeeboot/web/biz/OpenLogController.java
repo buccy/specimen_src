@@ -101,7 +101,7 @@ public class OpenLogController {
      */
     @RequestMapping(value = "view/{id}")
     @RequiresPermissions("sys:openLog:view")
-    public RetObject view(@PathVariable Integer id) {
+    public RetObject view(@PathVariable String id) {
         Map<String,Object> retMap=new HashMap<String, Object>();
 //        map.put("record",sysArea);
         return RetObject.genSuccess("成功了",retMap);

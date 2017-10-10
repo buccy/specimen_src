@@ -4,9 +4,9 @@ import javax.persistence.*;
 
 @Table(name = "biz_line")
 public class BizLine extends BaseEntity {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
 
     private String code;
 
@@ -34,40 +34,19 @@ public class BizLine extends BaseEntity {
 
     private String remark;
 
-    public BizWorker getWorker() {
-        return worker;
-    }
-
-    public void setWorker(BizWorker worker) {
-        this.worker = worker;
-    }
-
-    public SysArea getArea() {
-        return area;
-    }
-
-    public void setArea(SysArea area) {
-        this.area = area;
-    }
-
-    @Transient
-    private BizWorker worker;
-    @Transient
-    private  SysArea area;
-
     /**
      * @return id
      */
-//    public String getId() {
-//        return id;
-//    }
-//
-//    /**
-//     * @param id
-//     */
-//    public void setId(String id) {
-//        this.id = id;
-//    }
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * @return code

@@ -42,28 +42,5 @@
     a.del_flag AS delFlag
   </sql>
 
-  <select id="findCurrentUserMenu"  parameterType="SysUser" resultType="HashMap">
-    SELECT
-    a.id,
-    a.parent_id AS parentId,
-    a.parent_ids AS parentIds,
-    a.`name`,
-    a.sort,
-    a.href,
-    a.target,
-    a.icon,
-    a.is_show AS isShow,
-    a.permission,
-    a.remarks,
-    a.del_flag AS delFlag
-    FROM
-    sys_menu AS a ,
-    sys_role_menu AS b ,
-    sys_user_role AS c
-    WHERE a.id=b.menu_id
-    and b.role_id=c.role_id
-    and c.user_id=#{id}
-    and a.del_flag='0'
-    and a.is_show='1'
-  </select>
+
 </mapper>

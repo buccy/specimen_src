@@ -175,8 +175,11 @@ public class LoginController extends BaseController{
      */
     @RequestMapping("logout")
     public RetObject logout(){
-        //用户未登录
-        //用户注销
+        if (SecurityUtils.getSubject()==null){
+            return RetObject.genBizErr("please login first",null);
+        }
+
+        SecurityUtils.getSubject().logout();
         return RetObject.genSuccess("logout success",null);
     }
 
@@ -211,7 +214,7 @@ public class LoginController extends BaseController{
      *
      */
     @RequestMapping("/getCaptcha")
-    public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception{
+    public void getCaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception{
         byte[] captchaChallengeAsJpeg = null;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
         try {
@@ -236,6 +239,9 @@ public class LoginController extends BaseController{
         responseOutputStream.flush();
         responseOutputStream.close();
     }
+
+
+
 
 
 }

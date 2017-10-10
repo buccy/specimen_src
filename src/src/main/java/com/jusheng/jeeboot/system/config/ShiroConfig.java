@@ -4,6 +4,10 @@ import com.jusheng.jeeboot.system.security.CredentialsMatcher;
 import com.jusheng.jeeboot.system.filter.SysFilter;
 import com.jusheng.jeeboot.utils.LogUtils;
 import com.jusheng.jeeboot.system.security.ShiroAuthRealm;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheException;
+import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -48,6 +52,13 @@ public class ShiroConfig {
         return bean;
     }
 
+    @Bean(name="shiroCacaheManager")
+    public CacheManager shiroCacheManager(){
+        EhCacheManager ehCacheManager=new EhCacheManager();
+        ehCacheManager.setCacheManagerConfigFile("classpath:ehcache.xml");
+        return ehCacheManager;
+    }
+
     @Bean(name="sysFilter")
     public SysFilter sysFilter(@Qualifier("shiroFilter") ShiroFilterFactoryBean shiroFilterFactoryBean) {
         SysFilter sysFilter=new SysFilter();
@@ -57,17 +68,26 @@ public class ShiroConfig {
 
     //配置核心安全事务管理器
     @Bean(name="securityManager")
-    public SecurityManager securityManager(@Qualifier("shiroAuthRealm") ShiroAuthRealm shiroAuthRealm) {
+    public SecurityManager securityManager(@Qualifier("shiroAuthRealm") ShiroAuthRealm shiroAuthRealm,
+                                           @Qualifier("shiroCacaheManager") CacheManager cacheManager) {
         LogUtils.logger.info("--------------loading shiro--------------");
         DefaultWebSecurityManager manager=new DefaultWebSecurityManager();
         manager.setRealm(shiroAuthRealm);
+        manager.setCacheManager(cacheManager);
         return manager;
     }
+
+
+
+
+
     //配置自定义的权限登录器
     @Bean(name="shiroAuthRealm")
-    public ShiroAuthRealm authRealm(@Qualifier("credentialsMatcher") CredentialsMatcher matcher) {
+    public ShiroAuthRealm authRealm(@Qualifier("credentialsMatcher") CredentialsMatcher matcher,
+                                    @Qualifier("shiroCacaheManager") CacheManager cacheManager) {
         ShiroAuthRealm shiroAuthRealm=new ShiroAuthRealm();
         shiroAuthRealm.setCredentialsMatcher(matcher);
+        shiroAuthRealm.setCacheManager(cacheManager);
         return shiroAuthRealm;
     }
     //配置自定义的密码比较器

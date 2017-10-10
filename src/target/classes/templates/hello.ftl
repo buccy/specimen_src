@@ -1,9 +1,0 @@
-<!DOCTYPE html>
-
-<html lang="en">
-
-<body>
-hello world
-</body>
-
-</html>

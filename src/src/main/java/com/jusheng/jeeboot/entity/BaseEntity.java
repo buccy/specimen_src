@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jusheng.jeeboot.system.LoginedUser;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -36,13 +37,12 @@ import java.util.UUID;
  * @author liuzh
  * @since 2016-01-31 21:42
  */
-public class BaseEntity {
+public class BaseEntity implements Serializable {
 
     public enum OpFlag{
         undefined,//未指定
         add,//新增
-        update, //更新
-        delete //删除
+        update //更新
     }
 
     @Id
@@ -65,8 +65,40 @@ public class BaseEntity {
     @JsonIgnore
     private  com.jusheng.jeeboot.entity.SysUser  currentUser=LoginedUser.getCurrentUser();
 
+    /**
+     * 一键搜索，用于界面搜索时传入用户输入的值，例如可同时搜索 姓名或帐号
+     */
+    @Transient
+    @JsonIgnore
+    private String oneKeySearch;
+
+    /**
+     * 用于批量删除时获取相应的ids参数
+     */
+    @Transient
+    @JsonIgnore
+    private String ids;
+
+    public String[] getIds() {
+        return ids.split(",");
+    }
+
+    public void setIds(String ids) {
+        this.ids = ids;
+    }
+
+    public String getOneKeySearch() {
+        return oneKeySearch;
+    }
+
+    public void setOneKeySearch(String oneKeySearch) {
+        this.oneKeySearch = oneKeySearch;
+    }
 
     public SysUser getCurrentUser() {
+        if (currentUser==null){
+            currentUser=LoginedUser.getCurrentUser();
+        }
         return currentUser;
     }
 
@@ -114,5 +146,19 @@ public class BaseEntity {
     public boolean isAdmin(){
         com.jusheng.jeeboot.entity.SysUser sySUser=LoginedUser.getCurrentUser();
         return sySUser==null?false:sySUser.getLoginName().equals("admin");
+    }
+
+    /**
+     * 通过反射调用相应的表注解获取表明
+     * @return
+     */
+    @JsonIgnore
+    public String getTableName(){
+        if (this.getClass().isAnnotationPresent(Table.class)){
+            Table table=this.getClass().getAnnotation(Table.class);
+            return table.name();
+        }else{
+            return "";
+        }
     }
 }

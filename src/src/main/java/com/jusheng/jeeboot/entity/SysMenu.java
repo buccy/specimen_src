@@ -1,5 +1,7 @@
 package com.jusheng.jeeboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -46,6 +48,7 @@ public class SysMenu extends BaseEntity{
     /**
      * 是否在菜单中显示
      */
+    @JsonIgnore
     @Column(name = "is_show")
     private String isShow;
 
@@ -57,6 +60,7 @@ public class SysMenu extends BaseEntity{
     /**
      * 创建者
      */
+    @JsonIgnore
     @Column(name = "create_by")
     private String createBy;
 
@@ -64,29 +68,34 @@ public class SysMenu extends BaseEntity{
      * 创建时间
      */
     @Column(name = "create_date")
+    @JsonIgnore
     private Date createDate;
 
     /**
      * 更新者
      */
     @Column(name = "update_by")
+    @JsonIgnore
     private String updateBy;
 
     /**
      * 更新时间
      */
     @Column(name = "update_date")
+    @JsonIgnore
     private Date updateDate;
 
     /**
      * 备注信息
      */
+    @JsonIgnore
     private String remarks;
 
     /**
      * 删除标记
      */
     @Column(name = "del_flag")
+    @JsonIgnore
     private String delFlag;
 
     /**

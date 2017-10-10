@@ -1,10 +1,10 @@
 package com.jusheng.jeeboot.service;
 
+import com.jusheng.jeeboot.dao.CommonMapper;
 import com.jusheng.jeeboot.entity.BaseEntity;
 import com.jusheng.jeeboot.system.BaseMapper;
 import com.jusheng.jeeboot.system.LoginedUser;
 import com.jusheng.jeeboot.system.exception.BizErrorException;
-import com.jusheng.jeeboot.web.sys.LoginController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
@@ -14,10 +14,13 @@ import java.util.UUID;
 /**
  * 基础Service
  */
-public class BaseService<M extends BaseMapper,T extends BaseEntity> {
+public abstract class BaseService<M extends BaseMapper,T extends BaseEntity> {
 
     @Autowired
     protected M dao;
+
+    @Autowired
+    protected CommonMapper commonDao;
 
     public void save(T t) throws BizErrorException {
 
@@ -47,7 +50,7 @@ public class BaseService<M extends BaseMapper,T extends BaseEntity> {
 
     /**
      * 软删除，只置del_flag=1,并不真正删除数据，只有含有del_flag的表才可以用，否则报错
-     * @param id
+     * @param t
      * @return
      */
     public int deleteByIdWithFlag(T t) throws BizErrorException {
@@ -69,6 +72,15 @@ public class BaseService<M extends BaseMapper,T extends BaseEntity> {
 
         //更新表
         return dao.updateByPrimaryKeySelective(t);
+    }
+
+    /**
+     * 批量删除(硬删除)
+     * @param t
+     * @return
+     */
+    public int deleteBatchByIds(T t){
+        return this.commonDao.deleteBatchByIds(t);
     }
 
     /**

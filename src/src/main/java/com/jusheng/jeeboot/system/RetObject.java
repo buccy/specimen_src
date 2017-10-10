@@ -2,11 +2,13 @@ package com.jusheng.jeeboot.system;
 
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 /*
     用于JSON的数据交互结果类
  */
 @Component
-public class RetObject {
+public class RetObject implements Serializable {
     String retCode;//返回代码
     String retMsg;//返回消息
     Object data;//返回数据

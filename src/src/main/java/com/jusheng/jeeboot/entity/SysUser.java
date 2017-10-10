@@ -1,6 +1,11 @@
 package com.jusheng.jeeboot.entity;
 
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "sys_user")
@@ -86,24 +91,28 @@ public class SysUser extends BaseEntity{
      * 创建者
      */
     @Column(name = "create_by")
+    @JsonIgnore
     private String createBy;
 
     /**
      * 创建时间
      */
     @Column(name = "create_date")
+    @JsonIgnore
     private Date createDate;
 
     /**
      * 更新者
      */
     @Column(name = "update_by")
+    @JsonIgnore
     private String updateBy;
 
     /**
      * 更新时间
      */
     @Column(name = "update_date")
+    @JsonIgnore
     private Date updateDate;
 
     /**
@@ -115,7 +124,9 @@ public class SysUser extends BaseEntity{
      * 删除标记
      */
     @Column(name = "del_flag")
+    @JsonIgnore
     private String delFlag;
+
 
     /**
      * 获取归属公司

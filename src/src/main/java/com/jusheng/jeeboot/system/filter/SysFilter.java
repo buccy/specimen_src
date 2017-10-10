@@ -4,7 +4,6 @@ import com.jusheng.jeeboot.system.AppConst;
 import com.jusheng.jeeboot.utils.LogUtils;
 import com.jusheng.jeeboot.utils.RSAUtils;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import org.apache.logging.log4j.util.LoaderUtil;
 import org.apache.shiro.web.servlet.AdviceFilter;
 
 import javax.servlet.ServletRequest;

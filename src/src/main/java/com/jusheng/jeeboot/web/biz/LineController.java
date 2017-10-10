@@ -1,27 +1,16 @@
 package com.jusheng.jeeboot.web.biz;
 
-import com.github.pagehelper.PageInfo;
-import com.jusheng.jeeboot.entity.BaseEntity;
 import com.jusheng.jeeboot.entity.BizLine;
 import com.jusheng.jeeboot.entity.SysUser;
-import com.jusheng.jeeboot.service.biz.LineService;
 import com.jusheng.jeeboot.system.RetObject;
-import com.jusheng.jeeboot.system.exception.BeanValidException;
-import com.jusheng.jeeboot.system.exception.BizErrorException;
-import com.jusheng.jeeboot.web.BaseController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,9 +18,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/line")
-public class LineController extends BaseController {
-    @Autowired
-    LineService lineService;
+public class LineController {
+
 
     /**
      *
@@ -68,19 +56,15 @@ public class LineController extends BaseController {
      *
      */
     @RequestMapping("list")
-//    @RequiresPermissions("biz:line:view")
+    @RequiresPermissions("biz:line:view")
     public RetObject list(BizLine bizLine) {
-        List<BizLine> roleList = lineService.findList(bizLine);
-
         Map<String,Object> retMap=new HashMap<String, Object>();
+//        map.put("pageInfo", new PageInfo<Country>(countryList));
+//        map.put("queryParam", country);
+//        map.put("page", country.getPage());
+//        map.put("rows", country.getRows());
 
-        retMap.put("pageInfo", new PageInfo<BizLine>(roleList));
-        retMap.put("queryParam", bizLine);
-        retMap.put("page", bizLine.getPage());
-        retMap.put("rows", bizLine.getRows());
-
-        List<BizLine> list=lineService.findList(bizLine);
-        return RetObject.genSuccess("成功",retMap);
+        return RetObject.genSuccess("成功了",retMap);
     }
 
 
@@ -114,9 +98,10 @@ public class LineController extends BaseController {
      *
      */
     @RequestMapping(value = "view/{id}")
-    public RetObject view(@PathVariable String  id) {
-        BizLine bizLine=lineService.getById(id);
-        return RetObject.genSuccess("成功",bizLine);
+    public RetObject view(@PathVariable Integer id) {
+        Map<String,Object> retMap=new HashMap<String, Object>();
+//        map.put("record",sysArea);
+        return RetObject.genSuccess("成功了",retMap);
     }
 
 
@@ -145,10 +130,8 @@ public class LineController extends BaseController {
      *
      */
     @RequestMapping(value = "delete/{id}")
-    public RetObject delete(@PathVariable String id, RedirectAttributes ra) throws BizErrorException {
-        BizLine bizLine=new BizLine();
-        bizLine.setId(id);
-        lineService.deleteByIdWithFlag(bizLine);
+    public RetObject delete(@PathVariable Integer id, RedirectAttributes ra) {
+
         return RetObject.genSuccess("删除成功",null);
     }
 
@@ -189,23 +172,10 @@ public class LineController extends BaseController {
      *
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
-//    @RequiresPermissions("sys:line:edit")
-    public RetObject save(@Valid BizLine bizLine, BindingResult bindingResult, HttpServletRequest request) throws BizErrorException, BeanValidException {
-        //如果有校验不通过信息，则返回校验出错信息
-        beanValidator(bindingResult);
+    @RequiresPermissions("sys:line:edit")
+    public RetObject save(BizLine bizLine) {
 
-        String msg="";
-        if(bizLine.getOpFlag().equals(BaseEntity.OpFlag.add)) {
-            msg="新增成功";
-        }else if (bizLine.getOpFlag().equals(BaseEntity.OpFlag.update)) {
-            msg="修改成功";
-        }else{
-            msg="请传送操作标志";
-            return RetObject.genBizErr(msg,null);
-        }
-
-        this.lineService.save(bizLine);
-        return RetObject.genSuccess(msg,null);
+        return RetObject.genSuccess("新增/保存成功",null);
     }
 
 

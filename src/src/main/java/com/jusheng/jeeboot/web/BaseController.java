@@ -2,16 +2,10 @@ package com.jusheng.jeeboot.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
 import javax.validation.Validator;
 
-import com.jusheng.jeeboot.entity.BaseEntity;
-import com.jusheng.jeeboot.entity.SysRole;
-import com.jusheng.jeeboot.service.BaseService;
 import com.jusheng.jeeboot.system.RetObject;
 import com.jusheng.jeeboot.system.SysCode;
-import com.jusheng.jeeboot.system.config.validator.BeanValidators;
 import com.jusheng.jeeboot.system.exception.BeanValidException;
 import com.jusheng.jeeboot.system.exception.BizErrorException;
 import org.apache.shiro.authc.AuthenticationException;
@@ -23,7 +17,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,11 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Consumer;
 
-import static com.jusheng.jeeboot.system.SysCode.RET_Err_Biz_Valid;
-
-@ControllerAdvice
 public abstract class BaseController{
 
 	/** 验证Bean实例对象*/
@@ -54,6 +43,12 @@ public abstract class BaseController{
 		this.locale=locale;
 	}
 
+
+	/**
+	 * 如果检验不通过，则以Map的形式返回给前端，以BeanValidException异常方式处理
+	 * @param bindingResult
+	 * @throws BeanValidException
+     */
 	protected void beanValidator(BindingResult bindingResult) throws BeanValidException {
 		List<ObjectError> objectErrorList=bindingResult.getAllErrors();
 

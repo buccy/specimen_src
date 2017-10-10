@@ -1,34 +1,31 @@
 package com.jusheng.jeeboot.web.sys;
 
+import com.jusheng.jeeboot.dao.SysUserMapper;
 import com.jusheng.jeeboot.entity.SysMenu;
 import com.jusheng.jeeboot.entity.SysUser;
-import com.jusheng.jeeboot.service.sys.MenuService;
+import com.jusheng.jeeboot.service.sys.DictService;
 import com.jusheng.jeeboot.service.sys.UserService;
-import com.jusheng.jeeboot.system.LoginedUser;
 import com.jusheng.jeeboot.system.RetObject;
-import com.jusheng.jeeboot.system.SysCode;
+import com.jusheng.jeeboot.web.BaseController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/user")
-public class UserController {
+@RequestMapping("/api/user")
+public class UserController extends BaseController{
 
     @Autowired
-    private UserService userService;
-
+    UserService userService;
 
     /**
      *
@@ -176,4 +173,24 @@ public class UserController {
 
         return RetObject.genSuccess("新增/保存成功",null);
     }
+
+    /**
+     * 获取当前用户的权限菜单
+     * @param sysUser
+     * @return
+     */
+    @RequestMapping(value = "getUserPermission")
+//    @RequiresPermissions("sys:user:edit")
+    public RetObject getUserPermission(SysUser sysUser) {
+        List<SysMenu> sysMenuList=this.userService.getUserPermission(sysUser);
+        return RetObject.genSuccess("成功",sysMenuList);
+    }
+
+    @RequestMapping(value = "checkPermissions")
+//    @RequiresPermissions("sys:user:edit")
+    public RetObject checkPermissions(String permissions[]) {
+        Map<String ,Boolean> map=this.userService.checkPermissions(permissions);
+        return RetObject.genSuccess("成功",map);
+    }
+
 }

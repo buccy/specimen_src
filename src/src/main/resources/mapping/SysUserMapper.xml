@@ -28,4 +28,17 @@
     <result column="del_flag" property="delFlag" jdbcType="CHAR" />
   </resultMap>
 
+  <select id="getUserPermission" parameterType="SysUser" resultType="SysMenu" >
+  select distinct d.id,d.name,d.permission
+  from sys_user_role a,sys_role b,sys_role_menu c,sys_menu d
+    <where>
+    and a.user_id=#{currentUser.id}
+    and a.role_id=b.id
+    and b.id=c.role_id
+    and c.menu_id=d.id
+    and d.permission is not null and d.permission !=''
+    </where>
+  </select>
+
+
 </mapper>

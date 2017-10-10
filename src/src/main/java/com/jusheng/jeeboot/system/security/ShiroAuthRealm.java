@@ -1,5 +1,6 @@
 package com.jusheng.jeeboot.system.security;
 
+import com.jusheng.jeeboot.entity.SysMenu;
 import com.jusheng.jeeboot.entity.SysUser;
 import com.jusheng.jeeboot.service.sys.UserService;
 import org.apache.shiro.authc.*;
@@ -8,6 +9,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -46,20 +48,18 @@ public class ShiroAuthRealm extends AuthorizingRealm {
         SysUser sysUser=(SysUser) principal.fromRealm(this.getClass().getName()).iterator().next();//获取session中的用户
         List<String> permissions=new ArrayList<>();
 
-//        Set<Role> roles = sysUser.getRoles();
-//        if(roles.size()>0) {
-//            for(Role role : roles) {
-//                Set<Module> modules = role.getModules();
-//                if(modules.size()>0) {
-//                    for(Module module : modules) {
-//                        permissions.add(module.getMname());
-//                    }
-//                }
-//            }
-//        }
+        List<SysMenu> sysMenuList=this.userService.getUserPermission(sysUser);
 
-        permissions.add("yes");
+
+
+        //添加用户权限
+        sysMenuList.forEach(item->{
+            if (!StringUtils.isEmpty(item))
+            permissions.add(item.getPermission());
+        });
+
         SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
+
         info.addStringPermissions(permissions);//将权限放入shiro中.
         return info;
     }

@@ -48,7 +48,7 @@ public class NotifyController {
 
     /**
      *
-     * @param userIds 多个用户的ids 格式:1,3,5
+     * @param workerIds 多个用户的ids 格式:1,3,5
      * @param content 发送内容
      * @return RetObject
      */
@@ -57,17 +57,17 @@ public class NotifyController {
 
     /**
      *
-     * @api {save}/api/notify/alarm
+     * @api {save}/api/notify/broadcast
      * @apiDescription 发送通知公告
      * @apiGroup Notify
      * @apiName alarm
      * @apiVersion 1.0.0
-     * @apiParam {String}  userIds 多个用户的ids 格式:1,3,5
+     * @apiParam {String}  workerIds 多个人员的ids 格式:1,3,5
      * @apiParam {String} content 发送内容
      *
      * @apiExample {curl} 访问示例：
      *
-     *发送://api.demo.com /api/notify/alarm
+     *发送://api.demo.com /api/notify/broadcast
      *
      * @apiSuccess {String} retCode 返回结果码
      * @apiSuccess {String} retMsg 返回处理信息
@@ -82,7 +82,7 @@ public class NotifyController {
      */
     @RequestMapping("broadcast")
     @RequiresPermissions("biz:notify:sendBroadcast")
-    public RetObject sendBroadcast(String userIds,String content){
+    public RetObject sendBroadcast(String workerIds,String content){
         return null;
     }
 }
